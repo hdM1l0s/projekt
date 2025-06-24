@@ -181,3 +181,85 @@ def delete_client():
     client.marker.delete()
     listbox_clients.delete(selected_client_index)
     selected_client_index = None
+
+def show_all_archives():
+    map_widget.delete_all_marker()
+    for a in archives:
+        a.marker = map_widget.set_marker(*a.coordinates, text=a.name)
+
+def show_all_employees():
+    map_widget.delete_all_marker()
+    for e in employees:
+        e.marker = map_widget.set_marker(*e.coordinates, text=e.name)
+
+def show_clients_for_selected_archive():
+    if selected_archive_index is None: return
+    map_widget.delete_all_marker()
+    archive = archives[selected_archive_index]
+    for c in clients:
+        if c.archive == archive:
+            c.marker = map_widget.set_marker(*c.coordinates, text=c.name)
+def show_employees_for_selected_archive():
+    if selected_archive_index is None: return
+    map_widget.delete_all_marker()
+    archive = archives[selected_archive_index]
+    for e in employees:
+        if e.archive == archive:
+            e.marker = map_widget.set_marker(*e.coordinates, text=e.name)
+
+root = Tk()
+root.geometry("1200x800")
+root.title("System zarzadzania archiwami")
+
+frame_left = Frame(root)
+frame_left.grid(row=0, column=0, sticky=N)
+
+Label(frame_left, text="Archiwa").pack()
+listbox_archives = Listbox(frame_left)
+listbox_archives.pack()
+listbox_archives.bind("<<ListboxSelect>>", lambda e: fill_fields(listbox_archives, archives, entry_archive_name, entry_archive_location, "archive"))
+entry_archive_name = Entry(frame_left)
+entry_archive_name.pack()
+entry_archive_location = Entry(frame_left)
+entry_archive_location.pack()
+Button(frame_left, text="Dodaj archiwum", command=add_archive).pack()
+Button(frame_left, text="Edytuj archiwum", command=edit_archive).pack()
+Button(frame_left, text="Usuń archiwum", command=delete_archive).pack()
+Button(frame_left, text="Pokaż wszystkie archiwa", command=show_all_archives).pack()
+Label(frame_left, text="Pracownicy").pack()
+listbox_employees = Listbox(frame_left)
+listbox_employees.pack()
+listbox_employees.bind("<<ListboxSelect>>", lambda e: fill_fields(listbox_employees, employees, entry_employee_name, entry_employee_location, "employee"))
+entry_employee_name = Entry(frame_left)
+entry_employee_name.pack()
+entry_employee_location = Entry(frame_left)
+entry_employee_location.pack()
+archive_option_menu_var = StringVar()
+archive_option_menu = OptionMenu(frame_left, archive_option_menu_var, "")
+archive_option_menu.pack()
+Button(frame_left, text="Dodaj pracownika", command=add_employee).pack()
+Button(frame_left, text="Edytuj pracownika", command=edit_employee).pack()
+Button(frame_left, text="Usuń pracownika", command=delete_employee).pack()
+Button(frame_left, text="Pokaż wszystkich pracowników", command=show_all_employees).pack()
+Button(frame_left, text="Pokaż pracowników wybranego archiwum", command=show_employees_for_selected_archive).pack()
+Label(frame_left, text="Klienci").pack()
+listbox_clients = Listbox(frame_left)
+listbox_clients.pack()
+listbox_clients.bind("<<ListboxSelect>>", lambda e: fill_fields(listbox_clients, clients, entry_client_name, entry_client_location, "client"))
+entry_client_name = Entry(frame_left)
+entry_client_name.pack()
+entry_client_location = Entry(frame_left)
+entry_client_location.pack()
+Button(frame_left, text="Dodaj klienta", command=add_client).pack()
+Button(frame_left, text="Edytuj klienta", command=edit_client).pack()
+Button(frame_left, text="Usuń klienta", command=delete_client).pack()
+Button(frame_left, text="Pokaż klientów wybranego archiwum", command=show_clients_for_selected_archive).pack()
+
+map_widget = tkintermapview.TkinterMapView(root, width=900, height=800)
+map_widget.grid(row=0, column=1)
+map_widget.set_position(52.23, 21.01)
+map_widget.set_zoom(6)
+
+root.mainloop()
+
+
