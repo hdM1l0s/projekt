@@ -49,3 +49,6 @@ def get_coordinates(location):
     lat_str = soup.select_one('.latitude').text
     lon_str = soup.select_one('.longitude').text
     return dms_to_dd(lat_str), dms_to_dd(lon_str)
+archives = []
+employees = []
+clients = []
