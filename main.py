@@ -199,4 +199,15 @@ def show_clients_for_selected_archive():
     for c in clients:
         if c.archive == archive:
             c.marker = map_widget.set_marker(*c.coordinates, text=c.name)
+def show_employees_for_selected_archive():
+    if selected_archive_index is None: return
+    map_widget.delete_all_marker()
+    archive = archives[selected_archive_index]
+    for e in employees:
+        if e.archive == archive:
+            e.marker = map_widget.set_marker(*e.coordinates, text=e.name)
+
+root = Tk()
+root.geometry("1200x800")
+root.title("System zarzadzania archiwami")
 
