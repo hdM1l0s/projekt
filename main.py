@@ -103,3 +103,40 @@ def edit_archive():
     listbox_archives.insert(selected_archive_index, f"{name} - {location}")
     update_archive_option_menu()
 
+def delete_archive():
+    global selected_archive_index
+    if selected_archive_index is None: return
+    archive = archives.pop(selected_archive_index)
+    archive.marker.delete()
+    listbox_archives.delete(selected_archive_index)
+    selected_archive_index = None
+    update_archive_option_menu()
+
+def add_employee():
+    if not archives: return
+    name = entry_employee_name.get()
+    location = entry_employee_location.get()
+    if archive_option_menu_var.get() == "": return
+    archive = archives[int(archive_option_menu_var.get())]
+    e = Employee(name, location, archive)
+    employees.append(e)
+    listbox_employees.insert(END, f"{name} - {location} ({archive.name})")
+
+def edit_employee():
+    global selected_employee_index
+    if selected_employee_index is None: return
+    name = entry_employee_name.get()
+    location = entry_employee_location.get()
+    archive_index = archive_option_menu_var.get()
+    if archive_index == "" or not archive_index.isdigit(): return
+    new_archive = archives[int(archive_index)]
+    emp = employees[selected_employee_index]
+    emp.name = name
+    emp.location = location
+    emp.archive = new_archive
+    emp.coordinates = get_coordinates(location)
+    emp.marker = map_widget.set_marker(*emp.coordinates, text=name)
+    listbox_employees.delete(selected_employee_index)
+    listbox_employees.insert(selected_employee_index, f"{name} - {location} ({new_archive.name})")
+
+
