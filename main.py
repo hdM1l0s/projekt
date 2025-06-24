@@ -139,4 +139,38 @@ def edit_employee():
     listbox_employees.delete(selected_employee_index)
     listbox_employees.insert(selected_employee_index, f"{name} - {location} ({new_archive.name})")
 
+def delete_employee():
+    global selected_employee_index
+    if selected_employee_index is None: return
+    emp = employees.pop(selected_employee_index)
+    emp.marker.delete()
+    listbox_employees.delete(selected_employee_index)
+    selected_employee_index = None
+
+def add_client():
+    if not archives: return
+    name = entry_client_name.get()
+    location = entry_client_location.get()
+    if archive_option_menu_var.get() == "": return
+    archive = archives[int(archive_option_menu_var.get())]
+    c = Client(name, location, archive)
+    clients.append(c)
+    listbox_clients.insert(END, f"{name} - {location} ({archive.name})")
+
+def edit_client():
+    global selected_client_index
+    if selected_client_index is None: return
+    name = entry_client_name.get()
+    location = entry_client_location.get()
+    archive_index = archive_option_menu_var.get()
+    if archive_index == "" or not archive_index.isdigit(): return
+    new_archive = archives[int(archive_index)]
+    client = clients[selected_client_index]
+    client.name = name
+    client.location = location
+    client.archive = new_archive
+    client.coordinates = get_coordinates(location)
+    client.marker = map_widget.set_marker(*client.coordinates, text=name)
+    listbox_clients.delete(selected_client_index)
+    listbox_clients.insert(selected_client_index, f"{name} - {location} ({new_archive.name})")
 
