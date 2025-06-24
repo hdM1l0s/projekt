@@ -80,3 +80,26 @@ def fill_fields(listbox, data_list, entry_name, entry_location, obj_type):
     elif obj_type == "client":
         selected_client_index = index
         archive_option_menu_var.set(str(archives.index(item.archive)))
+
+def add_archive():
+    name = entry_archive_name.get()
+    location = entry_archive_location.get()
+    a = Archive(name, location)
+    archives.append(a)
+    listbox_archives.insert(END, f"{name} - {location}")
+    update_archive_option_menu()
+
+def edit_archive():
+    global selected_archive_index
+    if selected_archive_index is None: return
+    name = entry_archive_name.get()
+    location = entry_archive_location.get()
+    archive = archives[selected_archive_index]
+    archive.name = name
+    archive.location = location
+    archive.coordinates = get_coordinates(location)
+    archive.marker = map_widget.set_marker(*archive.coordinates, text=name)
+    listbox_archives.delete(selected_archive_index)
+    listbox_archives.insert(selected_archive_index, f"{name} - {location}")
+    update_archive_option_menu()
+
