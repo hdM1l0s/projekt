@@ -181,3 +181,22 @@ def delete_client():
     client.marker.delete()
     listbox_clients.delete(selected_client_index)
     selected_client_index = None
+
+def show_all_archives():
+    map_widget.delete_all_marker()
+    for a in archives:
+        a.marker = map_widget.set_marker(*a.coordinates, text=a.name)
+
+def show_all_employees():
+    map_widget.delete_all_marker()
+    for e in employees:
+        e.marker = map_widget.set_marker(*e.coordinates, text=e.name)
+
+def show_clients_for_selected_archive():
+    if selected_archive_index is None: return
+    map_widget.delete_all_marker()
+    archive = archives[selected_archive_index]
+    for c in clients:
+        if c.archive == archive:
+            c.marker = map_widget.set_marker(*c.coordinates, text=c.name)
+
