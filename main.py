@@ -52,3 +52,31 @@ def get_coordinates(location):
 archives = []
 employees = []
 clients = []
+
+def update_archive_option_menu():
+    menu = archive_option_menu['menu']
+    menu.delete(0, 'end')
+    for i, a in enumerate(archives):
+        menu.add_command(label=f"{a.name}", command=lambda value=i: archive_option_menu_var.set(str(value)))
+    if archives:
+        archive_option_menu_var.set("0")
+    else:
+        archive_option_menu_var.set("")
+
+def fill_fields(listbox, data_list, entry_name, entry_location, obj_type):
+    idx = listbox.curselection()
+    if not idx: return
+    index = idx[0]
+    item = data_list[index]
+    entry_name.delete(0, END)
+    entry_name.insert(0, item.name)
+    entry_location.delete(0, END)
+    entry_location.insert(0, item.location)
+    global selected_archive_index, selected_employee_index, selected_client_index
+    if obj_type == "archive": selected_archive_index = index
+    elif obj_type == "employee":
+        selected_employee_index = index
+        archive_option_menu_var.set(str(archives.index(item.archive)))
+    elif obj_type == "client":
+        selected_client_index = index
+        archive_option_menu_var.set(str(archives.index(item.archive)))
