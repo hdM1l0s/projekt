@@ -174,3 +174,10 @@ def edit_client():
     listbox_clients.delete(selected_client_index)
     listbox_clients.insert(selected_client_index, f"{name} - {location} ({new_archive.name})")
 
+def delete_client():
+    global selected_client_index
+    if selected_client_index is None: return
+    client = clients.pop(selected_client_index)
+    client.marker.delete()
+    listbox_clients.delete(selected_client_index)
+    selected_client_index = None
